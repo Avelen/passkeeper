@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import SignIn from './components/Singin';
-import ProjectsComponent from './components/ProjectsComponent';
-import ProjectItem from './components/ProjectItem';
-import { Container, CssBaseline, Box } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthPage from './pages/AuthPage';
+import { Routes, Route } from "react-router-dom";
 
-const theme = createTheme();
+import ProjectPage from "./pages/ProjectsPage";
 
 function App() {
   const [ isAuth, setIsAuth ] = useState(false);
@@ -14,28 +11,19 @@ function App() {
     if(localStorage.getItem('auth')){
       setIsAuth(true);
     }
-  }, []);
+  }, [isAuth]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="md">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        ></Box>
+    <>
         {isAuth
           ?
-          <ProjectsComponent />
+            <Routes>
+                <Route path="/projects" element={<ProjectPage />}>Projets</Route>
+            </Routes>
           :
-          <SignIn />
+          <AuthPage />
         }
-      </Container>
-    </ThemeProvider>
+    </>
   );
 }
 
