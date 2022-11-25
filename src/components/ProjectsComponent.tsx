@@ -1,30 +1,16 @@
-import { Box, Grid, Link, Typography } from '@mui/material';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Box, Grid, Typography } from '@mui/material';
 
-export default function ProjectsComponent() {
+function ProjectsComponent() {
 
-    const projects = [
-        {   
-            id: '1',
-            title: 'mediapanda.ru',
-            link: '#',
-        },
-        {
-            id: '2',
-            title: 'viamond',
-            link: '#',
-        },
-        {
-            id: '3',
-            title: 'test',
-            link: '#',
-        },
-        {
-            id: '4',
-            title: 'lorem ipsun',
-            link: '#',
-        }
-    ]
+    const [ projects, setProjects ] = useState([]);
+
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/posts')
+        .then(res => res.json())
+        .then(data => setProjects(data))
+    }, []);
 
     return (
         <Box>
@@ -48,7 +34,7 @@ export default function ProjectsComponent() {
                         alignItems: 'center',
                     }}
                     >
-                    <Link href={ item.link }>
+                    <Link to={`/projects/${item.id}` }>
                         {item.title}
                     </Link>
                 </Grid>
@@ -57,3 +43,5 @@ export default function ProjectsComponent() {
         </Box>
     )
 }
+
+export default ProjectsComponent;

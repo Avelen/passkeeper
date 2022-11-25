@@ -1,27 +1,34 @@
 import React from "react";
-import { Container, CssBaseline, Box } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ProjectItem from '../components/ProjectItem';
-
-const theme = createTheme();
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import ProjectItem from "../components/ProjectItem";
+import { Button } from "@mui/material";
 
 function SinglePage() {
-    
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [ project, setProject ] = useState(null);
+
+    const goBack = () => navigate(-1);
+
+    useEffect(() =>{
+        fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+        .then(res => res.json())
+        .then(data => setProject(data))
+    }, [id]);
+
     return (
-    <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="md">
-            <CssBaseline />
-                <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            ></Box>
-            <ProjectItem />
-        </Container>
-    </ThemeProvider>
+        <>
+            {project && (
+                <>
+                    <Button onClick={goBack}>Back</Button>
+                    <h1>{ project.id }</h1>
+                    <p>{ project.title }</p>
+                    <ProjectItem project={project}  />
+                    <Link to={`/projects/${id}/edit`}>Edit project</Link>
+                </>
+            )}
+        </>
     )
 }
 

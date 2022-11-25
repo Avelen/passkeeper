@@ -5,15 +5,23 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { useAuth } from '../hook/useAuth';
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {logIn} = useAuth();
+
+  const fromPage = location.state?.from?.pathname || '/';
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const login = data.get('login');
-    if(login){
-      localStorage.setItem('auth', login);
-    }
+    const user = data.get('login');
+
+    logIn(user, () => navigate(fromPage, {replace: true}));
   };
 
   return (
@@ -27,7 +35,11 @@ export default function SignIn() {
       <Typography component="h1" variant="h5">
         Passkeeper
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box 
+          component="form" 
+          onSubmit={handleSubmit} 
+          noValidate sx={{ mt: 1 }}
+        >
         <TextField
           margin="normal"
           required

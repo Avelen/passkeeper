@@ -1,8 +1,8 @@
 import { Typography, Grid, Input, Alert } from "@mui/material";
 import React, { useState } from "react";
 
-export default function ProjectItem() {
-
+export default function ProjectItem(props) {
+    // const { project } = props.project;
     const [ isCopyed, setCopyed ] = useState(false);
 
     function CopyValue(element) {
