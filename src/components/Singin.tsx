@@ -1,78 +1,35 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { useLocation, useNavigate } from "react-router-dom";
-
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useAuth } from '../hook/useAuth';
+import { setUser } from '../store/slices/userSlice';
+import FormComponent from './FormComponent';
+
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 
 export default function SignIn() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const {logIn} = useAuth();
+    const dispach = useDispatch();
 
-  const fromPage = location.state?.from?.pathname || '/';
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user = data.get('login');
+    const email = data.get('email');
+    const password = data.get('password');
 
-    logIn(user, () => navigate(fromPage, {replace: true}));
-  };
+    console.log(email, password);
 
-  return (
-    <Box 
-      sx={{
-        maxWidth: 400,
-        width: '100%',
-        margin: 'auto',
-      }}
-    >
-      <Typography component="h1" variant="h5">
-        Passkeeper
-      </Typography>
-      <Box 
-          component="form" 
-          onSubmit={handleSubmit} 
-          noValidate sx={{ mt: 1 }}
-        >
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="login"
-          label="Login"
-          name="login"
-          autoComplete="login"
-          autoFocus
+    const auth = getAuth();
+
+    signInWithEmailAndPassword(auth, email, password)
+    .then(console.log)
+    .catch(console.error)
+
+    };
+
+    return (
+        <FormComponent 
+            title="sign in"
+            handleSubmit={handleSubmit}
         />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-        />
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Sign In
-        </Button>
-      </Box>
-    </Box>
-  );
+    );
 }
