@@ -1,15 +1,18 @@
 import React from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import ProjectItem from "../components/ProjectItem";
 import { Button } from "@mui/material";
+import { useAuth } from "../hook/useAuth";
 
 function SinglePage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [ project, setProject ] = useState(null);
+    const {isAuth} = useAuth();
 
     const goBack = () => navigate(-1);
+    const goEdit = () => navigate(`/projects/${id}/edit`);
 
     useEffect(() =>{
         fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
@@ -17,18 +20,33 @@ function SinglePage() {
         .then(data => setProject(data))
     }, [id]);
 
-    return (
+    return isAuth ? (
         <>
             {project && (
                 <>
-                    <Button onClick={goBack}>Back</Button>
+                    <Button 
+                        variant="contained" 
+                        onClick={goBack}
+                    >
+                        Back
+                    </Button>
                     <h1>{ project.id }</h1>
                     <p>{ project.title }</p>
                     <ProjectItem project={project}  />
-                    <Link to={`/projects/${id}/edit`}>Edit project</Link>
+                    <Button 
+                        variant="contained"
+                        onClick={goEdit}
+                        sx={{
+                            marginTop:"20px"
+                        }}
+                    >
+                        Edit project
+                    </Button>
                 </>
             )}
         </>
+    ) : (
+        <Navigate to="/" />
     )
 }
 

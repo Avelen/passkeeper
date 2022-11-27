@@ -1,0 +1,28 @@
+.heading-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    color: #fff;
+
+    a{
+        color: #fff;
+        text-decoration: none;
+
+        &:hover{
+            text-decoration: underline
+        }
+        &.active{
+            color: pink;
+        }
+    }
+}
+.create-link{
+    text-decoration: none;
+    color: #1565c0;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}

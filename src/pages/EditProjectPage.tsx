@@ -1,11 +1,15 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
+import { useAuth } from "../hook/useAuth";
 
 function EditProjectPage() {
+    const {isAuth} = useAuth();
     const { id } = useParams();
 
-    return (
+    return isAuth ? (
         <h1>Edit project {id}</h1>
+    ) : (
+        <Navigate to="/" />
     )
 }
 

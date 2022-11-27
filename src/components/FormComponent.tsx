@@ -55,7 +55,7 @@ function FormComponent({title, handleSubmit}) {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
             />
-            <Button
+            <Button variant="contained"
                 type="submit"
                 fullWidth
                 variant="contained"
